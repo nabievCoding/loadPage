@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
-    <p id="pId"></p>
+    <div id="divId"></div>
 </body>
 <script>
   const supaUrl='https://iducolnmcgkjqczypsmk.supabase.co';
@@ -19,8 +19,19 @@
         schema:'public',
         table:'messages'
     },(playload)=>{
-        console.log('yangi xabar: '+playload.new);
-        document.getElementById('pId').innerHTML+=playload.new.msg+"<br>"+playload.new.created_at+"===============<br>"
+        const msg=playload.new;
+        const container = document.getElementById("divId");
+  const textElement = document.createElement("p");
+  textElement.textContent = msg.text;
+  container.appendChild(textElement);
+  if (msg.file_url && msg.file_url.trim() !== "") {
+    const img = document.createElement("img");
+    img.src = msg.file_url;
+    img.alt = "Yuklangan rasm";
+    img.style.maxWidth = "300px"; // ixtiyoriy
+    container.appendChild(img);
+  }
+        }
     }
     )
     .subscribe();
