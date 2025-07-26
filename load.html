@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoadPage</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
+    <p id="pId"></p>
+</body>
+<script>
+  const supaUrl='https://iducolnmcgkjqczypsmk.supabase.co';
+      const supaApi='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkdWNvbG5tY2dranFjenlwc21rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM1MzQyNjEsImV4cCI6MjA2OTExMDI2MX0.nzn25LKB1v0sCZV2CGalZ57_mdlvUh-SoAcCWxvxb4A';
+    const client=supabase.createClient(supaUrl,supaApi);
+    client.channel('realtime:messages')
+    .on('postgres_changes',{
+        event:'INSERT',
+        schema:'public',
+        table:'messages'
+    },(playload)=>{
+        console.log('yangi xabar: '+playload.new);
+        document.getElementById('pId').innerHTML+=playload.new.msg+"<br>"+playload.new.created_at+"===============<br>"
+    }
+    )
+    .subscribe();
+</script>
+</html>
